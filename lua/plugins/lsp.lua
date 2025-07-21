@@ -219,6 +219,8 @@ return {
 				-- ts_ls = {},
 				--
 				--
+				--
+				csharp_ls = {},
 
 				lua_ls = {
 					-- cmd = { ... },
