@@ -5,7 +5,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
---
 vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
@@ -81,11 +80,6 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
-vim.o.expandtab = true
-vim.o.smartindent = true
-vim.o.tabstop = 4
-vim.o.shiftwidth = 4
-
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -138,5 +132,3 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.hl.on_yank()
 	end,
 })
-
-vim.keymap.set("n", "<C-u>", "<cmd>e %:h<CR>", { desc = "Select folder" })
