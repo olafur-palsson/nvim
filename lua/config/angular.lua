@@ -1,9 +1,8 @@
-vim.api.nvim_create_user_command("AngularSwitch2", function()
-	local fname = vim.fn.expand("%:t") -- current filename
-	local base = fname:match("(.+)%.%w+$") -- e.g., component
-	local ext = fname:match("^.+%.(%w+)$") -- e.g., ts
-	local dir = vim.fn.expand("%:p:h") -- full directory path
-
+vim.api.nvim_create_user_command("AngularCss", function()
+	local fname = vim.fn.expand("%:t")
+	local base = fname:match("(.+)%.%w+$")
+	local ext = fname:match("^.+%.(%w+)$")
+	local dir = vim.fn.expand("%:p:h")
 	local style_exts = { "scss", "css", "less" }
 
 	local function find_style_file()
@@ -16,25 +15,13 @@ vim.api.nvim_create_user_command("AngularSwitch2", function()
 		return nil
 	end
 
-	local next_file
-	if ext == "ts" then
-		next_file = string.format("%s/%s.html", dir, base)
-	elseif ext == "html" then
-		local style = find_style_file()
-		if style then
-			next_file = string.format("%s/%s.%s", dir, base, style)
-		else
-			print("No matching style file found.")
-			return
-		end
-	elseif vim.tbl_contains(style_exts, ext) then
-		next_file = string.format("%s/%s.ts", dir, base)
-	else
-		print("Unsupported file type.")
-		return
+	local target_ext = find_style_file()
+	local target_file = string.format("%s/%s.%s", dir, base, target_ext)
+	if vim.fn.filereadable(target_file) == 1 then
+		-- Open in vertical split, resize to 30 characters wide
+		vim.cmd("vsplit " .. target_file)
+		vim.cmd("vertical resize 60")
 	end
-
-	vim.cmd("edit " .. next_file)
 end, {})
 
 vim.api.nvim_create_user_command("AngularSwitch", function()
@@ -57,17 +44,8 @@ vim.api.nvim_create_user_command("AngularSwitch", function()
 	local target_ext
 	if ext == "ts" then
 		target_ext = "html"
-	elseif ext == "html" then
-		target_ext = find_style_file()
-		if not target_ext then
-			print("No style file found.")
-			return
-		end
-	elseif vim.tbl_contains(style_exts, ext) then
-		target_ext = "ts"
 	else
-		print("Unsupported file type.")
-		return
+		target_ext = "ts"
 	end
 
 	local target_file = string.format("%s/%s.%s", dir, base, target_ext)
@@ -85,6 +63,7 @@ vim.api.nvim_create_user_command("AngularSwitch", function()
 
 	-- open in a new tab
 	vim.cmd("tabedit " .. target_file)
+	vim.cmd("AngularCss")
 end, {})
 
 vim.keymap.set("n", "<Leader>ng", "<cmd>AngularSwitch<CR>")

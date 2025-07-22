@@ -138,3 +138,5 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.hl.on_yank()
 	end,
 })
+
+vim.keymap.set("n", "<C-u>", "<cmd>e %:h<CR>", { desc = "Select folder" })

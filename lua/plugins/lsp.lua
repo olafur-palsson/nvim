@@ -14,7 +14,21 @@ return {
 			{ "j-hui/fidget.nvim", opts = {} },
 
 			-- Allows extra capabilities provided by blink.cmp
-			"saghen/blink.cmp",
+			{
+				"saghen/blink.cmp",
+				opts = {
+					keymap = {
+						-- If completion hasn't been triggered yet, insert the first suggestion; if it has, cycle to the next suggestion.
+						["<Tab>"] = {
+							function(cmp)
+								return cmp.accept()
+							end,
+							"fallback",
+						},
+						-- Navigate to the previous suggestion or cancel completion if currently on the first one.
+					},
+				},
+			},
 		},
 		config = function()
 			-- Brief aside: **What is LSP?**
