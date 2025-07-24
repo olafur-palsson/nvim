@@ -106,6 +106,7 @@ return {
 		},
 		opts = {
 			notify_on_error = false,
+      stop_after_first = true,
 			format_on_save = function(bufnr)
 				-- Disable "format_on_save lsp_fallback" for languages that don't
 				-- have a well standardized coding style. You can add additional
@@ -256,10 +257,10 @@ return {
 			-- - sr)'  - [S]urround [R]eplace [)] [']
 			require("mini.surround").setup()
 			require("mini.files").setup({
-				options = {
-					use_as_default_explorer = false,
-				},
-			})
+        options = {
+          use_as_default_explorer = false,
+        }
+      })
 
 			vim.keymap.set("n", "<Leader>ee", function()
 				require("mini.files").open(vim.api.nvim_buf_get_name(0), false, {
