@@ -40,9 +40,12 @@ local function find_csproj_in_dir(dir)
 	return nil
 end
 
-local function find_dll_file(start_dir)
+local function find_dll_file(dir)
 	local dir = find_cs_project_root(start_dir)
-	local csproj = find_csproj_in_dir(dir)
+	local csproj = find_csproj_in_dir(start_dir)
+	if csproj == nil then
+		return "/no/path/to/file.dll"
+	end
 	local csprojname = vim.fn.fnamemodify(csproj, ":t")
 	local dll_name = string.gsub(csprojname, "csproj", "dll", 1)
 	local function scan(path)
@@ -86,7 +89,9 @@ dap.configurations.cs = {
 		type = "coreclr",
 		request = "launch",
 		name = "Launch .NET Core App",
-		program = find_dll_file(vim.fn.getcwd(0)), --point to the .dll project build file
+		program = function()
+			return find_dll_file(vim.fn.getcwd(0))
+		end,
 		args = {},
 		cwd = vim.fn.getcwd(0), --root directory of your project
 		env = {
