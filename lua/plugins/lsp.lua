@@ -12,7 +12,31 @@ return {
 
 			-- Useful status updates for LSP.
 			{ "j-hui/fidget.nvim", opts = {} },
-
+			{
+				"nvim-flutter/flutter-tools.nvim",
+				lazy = false,
+				dependencies = {
+					"nvim-lua/plenary.nvim",
+					"stevearc/dressing.nvim", -- optional for vim.ui.select
+				},
+				config = function()
+					require("flutter-tools").setup({
+						flutter_path = "/home/oli/snap/flutter/common/flutter/bin/flutter",
+					})
+					vim.api.nvim_create_autocmd("FileType", {
+						pattern = "dart", -- or {"python", "lua", "javascript"} for multiple
+						callback = function()
+							-- Normal mode keymap for Python files
+							vim.keymap.set(
+								"n",
+								"<F5>",
+								":FlutterRun<CR>",
+								{ buffer = true, desc = "Run flutter" }
+							)
+						end,
+					})
+				end,
+			},
 			-- Allows extra capabilities provided by blink.cmp
 			{
 				"saghen/blink.cmp",
@@ -75,7 +99,7 @@ return {
 
 					-- Rename the variable under your cursor.
 					--  Most Language Servers support renaming across files, etc.
-					map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
+					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 
 					-- Execute a code action, usually your cursor needs to be on top of an error
 					-- or a suggestion from your LSP for this to activate.

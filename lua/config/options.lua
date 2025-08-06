@@ -14,6 +14,7 @@ vim.g.have_nerd_font = true
 
 -- Make line numbers default
 vim.o.number = true
+vim.o.wrap = false
 
 vim.opt.swapfile = false
 -- You can also add relative line numbers, to help with jumping.
@@ -25,6 +26,9 @@ vim.opt.swapfile = false
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
+
+-- Disable code folding
+vim.o.foldenable = false
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -81,6 +85,18 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+
+vim.api.nvim_create_autocmd("Filetype", {
+	pattern = "dart",
+	callback = function() 
+		vim.bo.tabstop = 2
+		vim.bo.shiftwidth = 2
+	end,
+})
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`

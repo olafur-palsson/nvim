@@ -21,6 +21,7 @@ vim.api.nvim_create_user_command("AngularCss", function()
 		-- Open in vertical split, resize to 30 characters wide
 		vim.cmd("vsplit " .. target_file)
 		vim.cmd("vertical resize 60")
+		vim.cmd("")
 	end
 end, {})
 
@@ -64,6 +65,7 @@ vim.api.nvim_create_user_command("AngularSwitch", function()
 	-- open in a new tab
 	vim.cmd("tabedit " .. target_file)
 	vim.cmd("AngularCss")
+	vim.cmd("")
 end, {})
 
 vim.keymap.set("n", "<Leader>ng", "<cmd>AngularSwitch<CR>")
