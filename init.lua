@@ -4,6 +4,7 @@ require("config.angular")
 require("config.debug")
 require("config.tree-sitter")
 require('config.luasnip')
+require('config.luasnip_snippets')
 
 vim.keymap.set('n', '<leader>so', function ()
     vim.cmd('source $MYVIMRC')
