@@ -5,6 +5,11 @@ vim.api.nvim_create_user_command("AngularCss", function()
 	local dir = vim.fn.expand("%:p:h")
 	local style_exts = { "scss", "css", "less" }
 
+    if ext == 'ts' then
+	    vim.cmd("AngularSwitch")
+    end
+
+
 	local function find_style_file()
 		for _, se in ipairs(style_exts) do
 			local f = string.format("%s/%s.%s", dir, base, se)
@@ -37,34 +42,29 @@ vim.api.nvim_create_user_command("AngularCss", function()
 end, {})
 
 vim.api.nvim_create_user_command("AngularSwitch", function()
-	local fname = vim.fn.expand("%:t")
-	local base = fname:match("(.+)%.%w+$")
-	local ext = fname:match("^.+%.(%w+)$")
-	local dir = vim.fn.expand("%:p:h")
+  local fname = vim.fn.expand("%:t")
+  local base = fname:match("(.+)%.%w+$")
+  local ext  = fname:match("^.+%.(%w+)$")
+  local dir  = vim.fn.expand("%:p:h")
 
-	local target_ext
-	if ext == "ts" then
-		target_ext = "html"
-	else
-		target_ext = "ts"
-	end
+  local target_ext = (ext == "ts") and "html" or "ts"
+  local target_file = vim.fn.fnamemodify(string.format("%s/%s.%s", dir, base, target_ext), ":p")
 
-	local target_file = string.format("%s/%s.%s", dir, base, target_ext)
+  -- Search all windows in all tabs
+  for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      local name = vim.api.nvim_buf_get_name(buf)
+      if name == target_file then
+        vim.api.nvim_set_current_tabpage(tab)
+        vim.api.nvim_set_current_win(win)
+        return
+      end
+    end
+  end
 
-	-- check if the file is already open in a tab
-	for _, tabnr in ipairs(vim.api.nvim_list_tabpages()) do
-		local win = vim.api.nvim_tabpage_get_win(tabnr)
-		local buf = vim.api.nvim_win_get_buf(win)
-		local name = vim.api.nvim_buf_get_name(buf)
-		if name == vim.fn.fnamemodify(target_file, ":p") then
-			vim.cmd("tabnext " .. vim.api.nvim_tabpage_get_number(tabnr))
-			return
-		end
-	end
-
-	-- open in a new tab
-	vim.cmd("tabedit " .. target_file)
-	vim.cmd("")
+  -- Not open anywhere → open new tab
+  vim.cmd("tabedit " .. target_file)
 end, {})
 
 vim.keymap.set("n", "<Leader>ng", "<cmd>AngularSwitch<CR>")

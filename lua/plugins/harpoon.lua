@@ -7,6 +7,13 @@ return {
 			})
 			local harpoon_mark = require('harpoon.mark')
 			local harpoon_ui = require('harpoon.ui')
+
+
+            vim.keymap.set("n", "<Leader>sp", function() 
+                vim.cmd("vsp")
+                vim.cmd("vertical resize 60")
+                harpoon_ui.nav_next()
+            end)
 			vim.keymap.set('n', '<leader>a', function() 
 				harpoon_mark.add_file()
 			end, { desc = "Harpoon Add"})
