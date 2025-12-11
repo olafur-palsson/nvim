@@ -228,6 +228,8 @@ return {
 				},
 			})
 
+            vim.lsp.inlay_hint.enable()
+
 			-- LSP servers and clients are able to communicate to each other what features they support.
 			--  By default, Neovim doesn't support everything that is in the LSP specification.
 			--  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
@@ -258,7 +260,20 @@ return {
 				--
 				--
 				--
+                --
+                
+                
 				csharp_ls = {},
+
+
+                pyright = {
+                    settings = {
+                        python = {
+                            venvPath = ".",
+                            venv = ".venv"
+                        }
+                    }
+                },
 
 				lua_ls = {
 					-- cmd = { ... },
@@ -289,6 +304,28 @@ return {
 			--
 			-- You can add other tools here that you want Mason to install
 			-- for you, so that they are available from within Neovim.
+            local lspconfig = require("lspconfig")
+
+            lspconfig.ts_ls.setup({
+                settings = {
+                    typescript = {
+                        maxTsServerMemory = 4096,
+                    },
+                    javascript = {
+                        maxTsServerMemory = 4096,
+                    }
+                }
+            })
+
+            lspconfig.pyright.setup{
+              before_init = function(_, config)
+                local venv = vim.fn.getcwd() .. '/.venv'
+                if vim.fn.isdirectory(venv) == 1 then
+                  config.settings.python.pythonPath = venv .. '/bin/python'
+                end
+              end,
+            }
+            --
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code

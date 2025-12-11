@@ -82,6 +82,7 @@ ls.add_snippets("lua", {
 local html_snippets = {
     s('ngif', fmt('*ngIf="{}"', { i(0) })),
     s('ngife', fmt('*ngIf="{}; else {}"', { i(1), i(0) })),
+    s('ngfor', fmt('*ngFor="let {} of {}"', { i(1), i(0) })),
     s('ngm', fmt('[(ngModel)]="{}"', { i(0) })),
     s('ngt', fmt([[
         <ng-template #{}>
@@ -89,6 +90,7 @@ local html_snippets = {
         </ng-template>
     ]], { i(1), i(0) })),
     s('ngc', fmt('[class.{}]="{}"', { i(1), i(0) })),
+    s('pre', fmt('<pre>{{{{ {} | json }}}}</pre>', { i(0) })),
 }
 
 ls.add_snippets('htmlangular', html_snippets)

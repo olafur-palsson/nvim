@@ -19,6 +19,16 @@ vim.o.relativenumber = true
 vim.o.wrap = false
 
 vim.opt.swapfile = false
+vim.opt.report = 999999
+
+-- hide the "Pattern not found message"
+local orig_notify = vim.notify
+vim.notify = function(msg, level, opts)
+  if msg == "Pattern not found" or msg:match("^E486:") then
+    return
+  end
+  orig_notify(msg, level, opts)
+end
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
 -- vim.o.relativenumber = true
@@ -58,6 +68,8 @@ vim.o.updatetime = 250
 
 -- Decrease mapped sequence wait time
 vim.o.timeoutlen = 300
+vim.opt.ttimeoutlen = 300
+
 
 -- Configure how new splits should be opened
 vim.o.splitright = true
