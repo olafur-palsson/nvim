@@ -69,3 +69,12 @@ end, {})
 
 vim.keymap.set("n", "<Leader>ng", "<cmd>AngularSwitch<CR>")
 vim.keymap.set("n", "<Leader>cs", "<cmd>AngularCss<CR>")
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "htmlangular",
+  callback = function()
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.tabstop = 2
+    vim.opt_local.expandtab = true
+  end,
+})
